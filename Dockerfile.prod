@@ -34,6 +34,13 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar app.jar
 
+# Create config directory for dynamic config
+RUN mkdir -p /app/config
+
+# Copy entrypoint script that generates config from environment variables
+COPY .github/entrypoint.sh /app/entrypoint.sh
+RUN chmod +x /app/entrypoint.sh
+
 EXPOSE 8080
 
-CMD ["java", "-jar", "app.jar"]
+ENTRYPOINT ["/app/entrypoint.sh"]
