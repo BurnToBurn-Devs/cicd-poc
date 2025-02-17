@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI/CD Pipeline
 
 on:
   push:
@@ -51,9 +51,9 @@ jobs:
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.SSH_HOST }} # 서버 IP 또는 도메인
-          username: ${{ secrets.SSH_USERNAME }} # SSH 사용자명
-          key: ${{ secrets.SSH_KEY }} # SSH 비밀키 (문자열)
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
           script: |
             echo "Pulling latest image..."
             docker pull ${{ env.IMAGE_NAME }}:latest
@@ -61,7 +61,7 @@ jobs:
             docker stop easyshift_prod || true
             docker rm easyshift_prod || true
             echo "Starting new container with DB config..."
-            docker run -d --restart unless-stopped --name easyshift_prod -p 80:8080 \
+            docker run -d --restart unless-stopped --name easyshift_prod -p 80:${{ secrets.SERVER_PORT }} \
               -e SERVER_PORT="${{ secrets.SERVER_PORT }}" \
               -e DB_URL="${{ secrets.DB_URL }}" \
               -e DB_DRIVER="${{ secrets.DB_DRIVER }}" \
