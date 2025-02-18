@@ -62,10 +62,10 @@ jobs:
             docker stop ${{ env.CONTAINER_NAME }} || true
             docker rm ${{ env.CONTAINER_NAME }} || true
             echo "2. Starting new container with DB and OAuth config..."
-            docker run -d --restart unless-stopped --name ${{ env.CONTAINER_NAME }} -p 8080:${{ secrets.SERVER_PORT }} \
+            docker run -d --restart unless-stopped --name ${{ env.CONTAINER_NAME }} -p 8081:${{ secrets.SERVER_PORT }} \
               --add-host=host.docker.internal:host-gateway \
               -e SERVER_PORT="${{ secrets.SERVER_PORT }}" \
-              -e DB_URL="${{ secrets.DB_URL }}" \
+              -e DB_URL="${{ secrets.DB_URL_POC }}" \
               -e DB_DRIVER="${{ secrets.DB_DRIVER }}" \
               -e DB_DIALECT="${{ secrets.DB_DIALECT }}" \
               -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \

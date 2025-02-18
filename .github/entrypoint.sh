@@ -28,8 +28,8 @@ else
 fi
 
 if [ -n "$APPLICATION_OAUTH_CONFIG" ]; then
-  printf "%b" "$APPLICATION_OAUTH_CONFIG" > "$OAUTH_CONFIG_FILE"
-  echo "Generated OAuth config file from secret."
+  echo "$APPLICATION_OAUTH_CONFIG" | base64 --decode > "$OAUTH_CONFIG_FILE"
+  echo "Decoded OAuth config file from secret."
 else
   echo "APPLICATION_OAUTH_CONFIG not provided, skipping OAuth config generation."
 fi
