@@ -47,6 +47,7 @@ jobs:
     if: github.ref == 'refs/heads/main'
     env:
       IMAGE_NAME: codinggroot/easy-schedule-poc
+      CONTAINER_NAME: easyshift_prod_poc
     steps:
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v1.2.0
@@ -58,10 +59,10 @@ jobs:
             echo "Pulling latest image..."
             docker pull ${{ env.IMAGE_NAME }}:latest
             echo "1. Stopping and removing existing container..."
-            docker stop easyshift_prod_poc || true
-            docker rm easyshift_prod_poc || true
+            docker stop ${{ env.CONTAINER_NAME }} || true
+            docker rm ${{ env.CONTAINER_NAME }} || true
             echo "2. Starting new container with DB and OAuth config..."
-            docker run -d --restart unless-stopped --name easyshift_prod_poc_ -p 8080:${{ secrets.SERVER_PORT }} \
+            docker run -d --restart unless-stopped --name ${{ env.CONTAINER_NAME }} -p 8080:${{ secrets.SERVER_PORT }} \
               --add-host=host.docker.internal:host-gateway \
               -e SERVER_PORT="${{ secrets.SERVER_PORT }}" \
               -e DB_URL="${{ secrets.DB_URL }}" \
