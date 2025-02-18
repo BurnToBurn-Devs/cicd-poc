@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     env:
-      IMAGE_NAME: codinggroot/easy-schedule
+      IMAGE_NAME: codinggroot/easy-schedule-poc
       IMAGE_TAG: ${{ github.sha }}
     steps:
       - name: Checkout repository
@@ -46,7 +46,7 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     env:
-      IMAGE_NAME: codinggroot/easy-schedule
+      IMAGE_NAME: codinggroot/easy-schedule-poc
     steps:
       - name: Deploy to Production Server
         uses: appleboy/ssh-action@v1.2.0
@@ -58,10 +58,10 @@ jobs:
             echo "Pulling latest image..."
             docker pull ${{ env.IMAGE_NAME }}:latest
             echo "1. Stopping and removing existing container..."
-            docker stop easyshift_prod || true
-            docker rm easyshift_prod || true
+            docker stop easyshift_prod_poc || true
+            docker rm easyshift_prod_poc || true
             echo "2. Starting new container with DB config..."
-            docker run -d --restart unless-stopped --name easyshift_prod -p 80:${{ secrets.SERVER_PORT }} \
+            docker run -d --restart unless-stopped --name easyshift_prod_poc_ -p 8080:${{ secrets.SERVER_PORT }}
               --add-host=host.docker.internal:host-gateway \
               -e SERVER_PORT="${{ secrets.SERVER_PORT }}" \
               -e DB_URL="${{ secrets.DB_URL }}" \
