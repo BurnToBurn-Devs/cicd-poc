@@ -28,10 +28,11 @@ else
 fi
 
 if [ -n "$APPLICATION_OAUTH_CONFIG" ]; then
-  echo "$APPLICATION_OAUTH_CONFIG" > "$OAUTH_CONFIG_FILE"
+  printf "%b" "$APPLICATION_OAUTH_CONFIG" > "$OAUTH_CONFIG_FILE"
   echo "Generated OAuth config file from secret."
 else
   echo "APPLICATION_OAUTH_CONFIG not provided, skipping OAuth config generation."
 fi
+
 
 exec java -jar app.jar --spring.config.additional-location=file:/app/config/
