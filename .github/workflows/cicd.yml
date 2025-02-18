@@ -60,8 +60,8 @@ jobs:
             echo "1. Stopping and removing existing container..."
             docker stop easyshift_prod_poc || true
             docker rm easyshift_prod_poc || true
-            echo "2. Starting new container with DB config..."
-            docker run -d --restart unless-stopped --name easyshift_prod_poc_ -p 8080:${{ secrets.SERVER_PORT }}
+            echo "2. Starting new container with DB and OAuth config..."
+            docker run -d --restart unless-stopped --name easyshift_prod_poc_ -p 8080:${{ secrets.SERVER_PORT }} \
               --add-host=host.docker.internal:host-gateway \
               -e SERVER_PORT="${{ secrets.SERVER_PORT }}" \
               -e DB_URL="${{ secrets.DB_URL }}" \
@@ -69,4 +69,5 @@ jobs:
               -e DB_DIALECT="${{ secrets.DB_DIALECT }}" \
               -e DB_USERNAME="${{ secrets.DB_USERNAME }}" \
               -e DB_PASSWORD="${{ secrets.DB_PASSWORD }}" \
+              -e APPLICATION_OAUTH_CONFIG="${{ secrets.APPLICATION_OAUTH_CONFIG }}" \
               ${{ env.IMAGE_NAME }}:latest
